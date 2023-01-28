@@ -1,0 +1,55 @@
+﻿@model PaginatedList<Position>
+@{
+    int count = (Model.ActivePage - 1) * 3;
+}
+
+<div class="card-body">
+    <h4 class="card-title">Recycle Bin/Delete~Position/Table</h4>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Position position in Model)
+                {
+                    count++;
+                    <tr>
+                        <td>@count</td>
+                        <td>@position.Id</td>
+                        <td><label class="badge badge-info">@position.Name</label></td>
+                        <td>
+                            <a asp-action="restore" asp-controller="deletedPosition" asp-route-id="@position.Id" class="btn btn-primary"><i class="mdi mdi-file-restore"></i>Restore</a>
+                            <a asp-action="harddelete" asp-controller="deletedPosition" asp-route-id="@position.Id" class="btn btn-danger"><i class="mdi mdi-delete-forever"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            @if (Model.PreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-route-page="@(Model.ActivePage-1)">Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.TotalPageCount; i++)
+            {
+                <li class="page-item  @(Model.ActivePage==i?"active":"")"><a class="page-link" asp-route-page="@i">@i</a></li>
+            }
+            @if (Model.NextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-route-page="@(Model.ActivePage+1)">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
